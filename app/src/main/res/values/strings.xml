@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">sqllite</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_fav">Favourite</string>
+    <string name="nav_history">History</string>
+    <string name="nav_account">Account</string>
+    <string name="nav_profile">My Profile</string>
+    <string name="nav_change_pass">Change password</string>
+    <string name="nav_dwawer_open">Open navigation drawer</string>
+    <string name="nav_drawer_close">Close navigation drawer</string>
+
+
+</resources>
