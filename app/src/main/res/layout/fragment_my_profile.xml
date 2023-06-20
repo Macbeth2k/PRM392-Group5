@@ -22,7 +22,7 @@
         android:layout_marginTop="30dp"/>
 
     <EditText
-        android:id="@+id/edt_email"
+        android:id="@+id/edt_email_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
@@ -34,6 +34,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:padding="10dp"
         android:text="Update Profile"/>
+
+    <Button
+        android:id="@+id/btn_update_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:text="Update Email"/>
 
 </LinearLayout>

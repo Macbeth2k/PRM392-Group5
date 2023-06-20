@@ -10,7 +10,7 @@
     android:gravity="center">
 
     <EditText
-        android:id="@+id/edt_email"
+        android:id="@+id/edt_email_signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
@@ -20,7 +20,7 @@
         android:imeOptions="actionNext"/>
 
     <EditText
-        android:id="@+id/edt_password"
+        android:id="@+id/edt_password_signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"

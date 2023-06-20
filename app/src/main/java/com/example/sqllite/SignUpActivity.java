@@ -65,8 +65,8 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     private void initUi() {
-        edt_email = findViewById(R.id.edt_email);
-        edt_password = findViewById(R.id.edt_password);
+        edt_email = findViewById(R.id.edt_email_signup);
+        edt_password = findViewById(R.id.edt_password_signup);
         btnSignup = findViewById(R.id.btn_signup);
     }
 }

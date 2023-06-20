@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/white">
+
+    <EditText
+        android:id="@+id/edt_newpass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="New Password"
+        android:textSize="20sp"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:id="@+id/btn_changepass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Change password"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>

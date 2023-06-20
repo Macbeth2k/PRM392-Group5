@@ -10,7 +10,7 @@
     android:gravity="center">
 
     <EditText
-        android:id="@+id/edt_email"
+        android:id="@+id/edt_email_signin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
@@ -20,7 +20,7 @@
         android:imeOptions="actionNext"/>
 
     <EditText
-        android:id="@+id/edt_password"
+        android:id="@+id/edt_password_signin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
@@ -36,6 +36,26 @@
         android:layout_height="wrap_content"
         android:text="Sign in"
         android:layout_marginTop="30dp"/>
+
+    <LinearLayout
+        android:id="@+id/layout_forgot_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forgot password?"
+            android:textColor="@color/green"
+            android:textSize="14sp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/green"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,11 +79,17 @@
             android:textSize="16sp"
             android:textColor="@color/green"
             android:text="Sign up"/>
-
-
-
-
     </LinearLayout>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        style="@style/SpinKitView.Circle"
+        app:SpinKit_Color="@color/green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:id="@+id/processBar_signin"
+        android:visibility="invisible"/>
 
 
 </LinearLayout>

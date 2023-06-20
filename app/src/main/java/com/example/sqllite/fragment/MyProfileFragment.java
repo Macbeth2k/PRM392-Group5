@@ -42,7 +42,7 @@ public class MyProfileFragment extends Fragment {
     private View view;
     private ImageView img_ava;
     private EditText edtFullname, edtEmail;
-    private Button btnUpdateProfile;
+    private Button btnUpdateProfile, getBtnUpdateEmail;
     private Uri uri;
     private MainActivity activity;
 
@@ -55,6 +55,14 @@ public class MyProfileFragment extends Fragment {
         setUserInformation();
         initListener();
         return view;
+    }
+
+    private void initUi(){
+        img_ava = view.findViewById(R.id.image_avatar);
+        edtFullname = view.findViewById(R.id.edt_full_name);
+        edtEmail = view.findViewById(R.id.edt_email_profile);
+        btnUpdateProfile = view.findViewById(R.id.btn_update_profile);
+        getBtnUpdateEmail = view.findViewById(R.id.btn_update_email);
     }
 
     private void initListener() {
@@ -70,6 +78,29 @@ public class MyProfileFragment extends Fragment {
                 onClickUpdateProfile();
             }
         });
+        getBtnUpdateEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickUpdateEmail();
+            }
+        });
+    }
+
+    private void onClickUpdateEmail() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String email = edtEmail.getText().toString().trim();
+        user.updateEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getActivity(),"update email successful", Toast.LENGTH_SHORT).show();
+                            activity.showUserInformation();
+                        } else {
+                            Toast.makeText(getActivity(),"update email failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     public void setUri(Uri uri) {
@@ -94,6 +125,8 @@ public class MyProfileFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(),"update profile successful", Toast.LENGTH_SHORT);
                             activity.showUserInformation();
+                        } else {
+                            Toast.makeText(getActivity(),"update profile failed", Toast.LENGTH_SHORT);
                         }
                     }
                 });
@@ -124,14 +157,9 @@ public class MyProfileFragment extends Fragment {
         edtFullname.setText(user.getDisplayName());
         edtEmail.setText(user.getEmail());
         Glide.with(getActivity()).load(user.getPhotoUrl()).error(R.drawable.ic_ava_default).into(img_ava);
+        img_ava.getImageAlpha();
     }
 
-    private void initUi(){
-        img_ava = view.findViewById(R.id.image_avatar);
-        edtFullname = view.findViewById(R.id.edt_full_name);
-        edtEmail = view.findViewById(R.id.edt_email);
-        btnUpdateProfile = view.findViewById(R.id.btn_update_profile);
-    }
 
     public void setBitmapImageView(Bitmap bitmapImageView){
         img_ava.setImageBitmap(bitmapImageView);

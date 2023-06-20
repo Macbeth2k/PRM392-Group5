@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.sqllite.fragment.ChangePasswordFragment;
 import com.example.sqllite.fragment.FavouriteFragment;
 import com.example.sqllite.fragment.HistoryFragment;
 import com.example.sqllite.fragment.HomeFragment;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static int FRAGMENT_FAVOURITE = 1;
     private static int FRAGMENT_HISTORY = 2;
     private static int FRAGMENT_MY_PROFILE = 3;
+    private static int FRAGMENT_CHANGE_PASSWORD = 4;
     private int currentFragment = FRAGMENT_HOME;
     private ImageView img_avatar;
     private TextView tvName, tvEmail;
@@ -119,7 +121,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 currentFragment = FRAGMENT_MY_PROFILE;
             }
         } else if (id == R.id.nav_change_pass) {
-
+            if (currentFragment != FRAGMENT_CHANGE_PASSWORD){
+                replaceFragment(new ChangePasswordFragment());
+                currentFragment = FRAGMENT_CHANGE_PASSWORD;
+            }
         } else if (id == R.id.nav_signout) {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(this, SignInActivity.class);
@@ -186,6 +191,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        launcher.launch(Intent.createChooser(intent,"select pictures"));
+        launcher.launch(Intent.createChooser(intent,"Select Picture"));
     }
 }
