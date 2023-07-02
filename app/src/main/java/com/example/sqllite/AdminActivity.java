@@ -1,9 +1,5 @@
 package com.example.sqllite;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,17 +10,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.sqllite.fragment.AdminHomeFragment;
 import com.example.sqllite.fragment.ChangePasswordFragment;
 import com.example.sqllite.fragment.FavouriteFragment;
 import com.example.sqllite.fragment.HistoryFragment;
@@ -34,10 +28,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.io.IOException;
-
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    public static final int MY_REQUEST_CODE = 10;
+public class AdminActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private static int FRAGMENT_HOME = 0;
     private static int FRAGMENT_FAVOURITE = 1;
@@ -49,34 +40,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView tvName, tvEmail;
     private NavigationView navigationView;
     final private MyProfileFragment fragment = new MyProfileFragment();
-    final private ActivityResultLauncher<Intent> launcher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == RESULT_OK){
-                        Intent intent = result.getData();
-                        if (intent == null){
-                            return;
-                        }
-                        Uri uri = intent.getData();
-                        fragment.setUri(uri);
-                        try {
-                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(
-                                    getContentResolver(), uri);
-                            fragment.setBitmapImageView(bitmap);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_admin);
 
         Toolbar toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
@@ -91,18 +59,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        replaceFragment(new HomeFragment());
+        replaceFragment(new AdminHomeFragment());
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
 
         showUserInformation();
     }
 
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_home){
             if (currentFragment != FRAGMENT_HOME){
-                replaceFragment(new HomeFragment());
+                replaceFragment(new AdminHomeFragment());
                 currentFragment = FRAGMENT_HOME;
             }
         } else if (id == R.id.nav_fav) {
@@ -175,22 +142,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         tvEmail.setText(email);
         Glide.with(this).load(photoUrl).error(R.drawable.ic_ava_default).into(img_avatar);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MY_REQUEST_CODE){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                openGallery();
-            }
-        }
-    }
-
-    public void openGallery(){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        launcher.launch(Intent.createChooser(intent,"Select Picture"));
     }
 }

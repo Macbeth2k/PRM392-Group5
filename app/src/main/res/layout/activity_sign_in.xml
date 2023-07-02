@@ -91,5 +91,12 @@
         android:id="@+id/processBar_signin"
         android:visibility="invisible"/>
 
+    <TextView
+        android:id="@+id/tv_role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Role"
+        android:visibility="invisible"/>
+
 
 </LinearLayout>

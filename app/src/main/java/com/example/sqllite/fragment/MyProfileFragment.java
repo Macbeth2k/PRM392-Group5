@@ -1,6 +1,6 @@
 package com.example.sqllite.fragment;
 
-import static com.example.sqllite.MainActivity.MY_REQUEST_CODE;
+import static com.example.sqllite.UserActivity.MY_REQUEST_CODE;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -14,29 +14,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.sqllite.MainActivity;
+import com.example.sqllite.UserActivity;
 import com.example.sqllite.R;
-import com.example.sqllite.book.Book;
-import com.example.sqllite.category.Category;
-import com.example.sqllite.category.CategoryAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MyProfileFragment extends Fragment {
     private View view;
@@ -44,13 +35,13 @@ public class MyProfileFragment extends Fragment {
     private EditText edtFullname, edtEmail;
     private Button btnUpdateProfile, getBtnUpdateEmail;
     private Uri uri;
-    private MainActivity activity;
+    private UserActivity activity;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
-        activity = (MainActivity) getActivity();
+        activity = (UserActivity) getActivity();
         initUi();
         setUserInformation();
         initListener();

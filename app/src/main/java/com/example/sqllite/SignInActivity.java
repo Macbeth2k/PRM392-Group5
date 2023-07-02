@@ -1,9 +1,9 @@
 package com.example.sqllite;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.style.Circle;
@@ -21,7 +22,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,8 +38,11 @@ public class SignInActivity extends AppCompatActivity {
     private Button btnSignIn;
     private LinearLayout layoutForgotPassword;
     private ProgressBar progressBar;
+    private TextView tv_role;
     private Handler handler = new Handler();
-    private int counter = 0;
+    private int counter = 0; //process circle
+    private String role;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +111,7 @@ public class SignInActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finishAffinity();
+                            getHomeActivity(email);
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
@@ -114,6 +119,11 @@ public class SignInActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void getHomeActivity(String email) {
+        DatabaseReference myRef = database.getReference("account");
+        myRef.addChildEventListener(getRoleFromName(email));
     }
 
     private void initUi() {
@@ -124,6 +134,7 @@ public class SignInActivity extends AppCompatActivity {
         layoutForgotPassword = findViewById(R.id.layout_forgot_password);
         progressBar = findViewById(R.id.processBar_signin);
         progressBar.setIndeterminateDrawable(new Circle());
+        tv_role = findViewById(R.id.tv_role);
     }
 
     private void simulateProgress() {
@@ -141,4 +152,80 @@ public class SignInActivity extends AppCompatActivity {
         };
         timer.schedule(task,100,1000);
     }
+
+    private ChildEventListener getRoleFromId(String id){
+        return new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                if (snapshot.getKey().equals(id)){
+                    String role = snapshot.getValue(String.class);
+                    if (role.equals("admin")){
+                        Intent intent = new Intent(SignInActivity.this, AdminActivity.class);
+                        startActivity(intent);
+                        finishAffinity();
+                    }else {
+                        Intent intent = new Intent(SignInActivity.this, UserActivity.class);
+                        startActivity(intent);
+                        finishAffinity();
+                    }
+                    //move
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+    }
+
+    private ChildEventListener getRoleFromName(String name){
+        return new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                if (snapshot.getValue(String.class).equals(name)){
+                    String id = snapshot.getKey();
+                    DatabaseReference myRef = database.getReference("role");
+                    myRef.addChildEventListener(getRoleFromId(id));
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+    }
+
+
 }
