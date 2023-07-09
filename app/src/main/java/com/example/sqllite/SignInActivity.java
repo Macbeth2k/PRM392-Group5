@@ -38,10 +38,7 @@ public class SignInActivity extends AppCompatActivity {
     private Button btnSignIn;
     private LinearLayout layoutForgotPassword;
     private ProgressBar progressBar;
-    private TextView tv_role;
-    private Handler handler = new Handler();
     private int counter = 0; //process circle
-    private String role;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     @Override
@@ -57,7 +54,6 @@ public class SignInActivity extends AppCompatActivity {
         layoutSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                simulateProgress();
                 Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
                 startActivity(intent);
             }
@@ -67,7 +63,6 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 hideKeyBoard();
-                simulateProgress();
                 onClickSignIn();
             }
         });
@@ -103,6 +98,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void onClickSignIn() {
+        progressBar.setVisibility(View.VISIBLE);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         String email = edtEmail.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
@@ -114,7 +110,8 @@ public class SignInActivity extends AppCompatActivity {
                             getHomeActivity(email);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(SignInActivity.this, "Authentication failed.",
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(SignInActivity.this, getString(R.string.sign_in_fail),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -122,7 +119,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void getHomeActivity(String email) {
-        DatabaseReference myRef = database.getReference("account");
+        DatabaseReference myRef = database.getReference(getString(R.string.firebase_email_table));
         myRef.addChildEventListener(getRoleFromName(email));
     }
 
@@ -134,23 +131,7 @@ public class SignInActivity extends AppCompatActivity {
         layoutForgotPassword = findViewById(R.id.layout_forgot_password);
         progressBar = findViewById(R.id.processBar_signin);
         progressBar.setIndeterminateDrawable(new Circle());
-        tv_role = findViewById(R.id.tv_role);
-    }
 
-    private void simulateProgress() {
-        progressBar.setVisibility(View.VISIBLE);
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                counter++;
-                progressBar.setProgress(counter);
-                if (counter == 3){
-                    cancel();
-                }
-            }
-        };
-        timer.schedule(task,100,1000);
     }
 
     private ChildEventListener getRoleFromId(String id){
@@ -159,11 +140,13 @@ public class SignInActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 if (snapshot.getKey().equals(id)){
                     String role = snapshot.getValue(String.class);
-                    if (role.equals("admin")){
+                    if (role.equals(getString(R.string.role_admin))){
+                        progressBar.setVisibility(View.GONE);
                         Intent intent = new Intent(SignInActivity.this, AdminActivity.class);
                         startActivity(intent);
                         finishAffinity();
                     }else {
+                        progressBar.setVisibility(View.GONE);
                         Intent intent = new Intent(SignInActivity.this, UserActivity.class);
                         startActivity(intent);
                         finishAffinity();
@@ -200,7 +183,7 @@ public class SignInActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 if (snapshot.getValue(String.class).equals(name)){
                     String id = snapshot.getKey();
-                    DatabaseReference myRef = database.getReference("role");
+                    DatabaseReference myRef = database.getReference(getString(R.string.firebase_role_table));
                     myRef.addChildEventListener(getRoleFromId(id));
                 }
             }

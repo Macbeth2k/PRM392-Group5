@@ -12,7 +12,7 @@
     <EditText
         android:id="@+id/edt_email_signup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:textColor="@color/black"
@@ -22,8 +22,19 @@
     <EditText
         android:id="@+id/edt_password_signup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:hint="Password"
+        android:inputType="textPassword"
+        android:textColor="@color/black"
+        android:maxLength="100"
+        android:layout_marginTop="10dp"
+        android:imeOptions="actionDone"/>
+
+    <EditText
+        android:id="@+id/edt_cf_password_signup"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Confirm Password"
         android:inputType="textPassword"
         android:textColor="@color/black"
         android:maxLength="100"
@@ -37,11 +48,14 @@
         android:text="Sign up"
         android:layout_marginTop="30dp"/>
 
-    <TextView
-        android:id="@+id/tv_role_signup"
+    <com.github.ybq.android.spinkit.SpinKitView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        style="@style/SpinKitView.Circle"
+        app:SpinKit_Color="@color/green"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Role"
+        android:layout_marginTop="40dp"
+        android:id="@+id/processBar_signup"
         android:visibility="invisible"/>
 
 

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,15 +40,17 @@ public class SplashActivity extends AppCompatActivity {
             //haven't logged in
             Intent intent = new Intent(this, SignInActivity.class);
             startActivity(intent);
+            this.finish();
         }else {
             //have logged in
             String email = user.getEmail();
             getHomeActivity(email);
         }
+
     }
 
     private void getHomeActivity(String email) {
-        DatabaseReference myRef = database.getReference("account");
+        DatabaseReference myRef = database.getReference(getString(R.string.firebase_email_table));
         myRef.addChildEventListener(getRoleFromName(email));
     }
 
@@ -57,7 +60,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 if (snapshot.getKey().equals(id)){
                     String role = snapshot.getValue(String.class);
-                    if (role.equals("admin")){
+                    if (role.equals(R.string.role_admin)){
                         Intent intent = new Intent(SplashActivity.this, AdminActivity.class);
                         startActivity(intent);
                         finishAffinity();
@@ -98,9 +101,13 @@ public class SplashActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 if (snapshot.getValue(String.class).equals(name)){
                     String id = snapshot.getKey();
-                    DatabaseReference myRef = database.getReference("role");
+                    DatabaseReference myRef = database.getReference(getString(R.string.firebase_role_table));
                     myRef.addChildEventListener(getRoleFromId(id));
-                }
+               }//else {
+//                    Toast.makeText(SplashActivity.this,"please signin",Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(SplashActivity.this, SignInActivity.class);
+//                    startActivity(intent);
+//                }
             }
 
             @Override

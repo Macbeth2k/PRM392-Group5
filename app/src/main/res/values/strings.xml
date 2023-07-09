@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">sqllite</string>
+    <string name="app_name">Shoppee clone</string>
     <string name="nav_home">Home</string>
     <string name="nav_fav">Favourite</string>
     <string name="nav_history">History</string>
@@ -11,6 +11,19 @@
     <string name="nav_signout">Sign out</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="role_admin">admin</string>
+    <string name="role_user">user</string>
+
+    <string name="cf_pass_error">confirm password must be similar</string>
+    <string name="update_pass_success">User password updated</string>
+    <string name="update_pass_fail">User password update failed</string>
+    <string name="update_profile_successful">update profile successful</string>
+    <string name="update_profile_fail">update profile fail</string>
+    <string name="sign_in_fail">Your account is not exist or your password is wrong</string>
+    <string name="firebase_email_table">account</string>
+    <string name="firebase_role_table">role</string>
+    <string name="pass_constraint">Password must have at least 6 characters</string>
+    <string name="gallery">Select Picture</string>
 
 
 </resources>

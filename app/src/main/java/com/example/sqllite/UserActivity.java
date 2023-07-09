@@ -175,7 +175,7 @@ public class UserActivity extends AppCompatActivity implements NavigationView.On
             tvName.setText(name);
         }
         tvEmail.setText(email);
-        Glide.with(this).load(photoUrl).error(R.drawable.ic_ava_default).into(img_avatar);
+        Glide.with(this).load(user.getPhotoUrl()).error(R.drawable.ic_ava_default).into(img_avatar);
     }
 
     @Override
@@ -192,6 +192,6 @@ public class UserActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        launcher.launch(Intent.createChooser(intent,"Select Picture"));
+        launcher.launch(Intent.createChooser(intent,getString(R.string.gallery)));
     }
 }

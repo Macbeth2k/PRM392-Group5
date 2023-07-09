@@ -1,5 +1,9 @@
 package com.example.sqllite;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,8 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,10 +29,13 @@ import com.example.sqllite.fragment.ChangePasswordFragment;
 import com.example.sqllite.fragment.FavouriteFragment;
 import com.example.sqllite.fragment.HistoryFragment;
 import com.example.sqllite.fragment.HomeFragment;
+import com.example.sqllite.fragment.MyProfileAdminFragment;
 import com.example.sqllite.fragment.MyProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.io.IOException;
 
 public class AdminActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
@@ -39,14 +48,38 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     private ImageView img_avatar;
     private TextView tvName, tvEmail;
     private NavigationView navigationView;
-    final private MyProfileFragment fragment = new MyProfileFragment();
+    final private MyProfileAdminFragment fragment = new MyProfileAdminFragment();
+
+    final private ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK){
+                        Intent intent = result.getData();
+                        if (intent == null){
+                            return;
+                        }
+                        Uri uri = intent.getData();
+                        fragment.setUri(uri);
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                                    getContentResolver(), uri);
+                            fragment.setBitmapImageView(bitmap);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
-        Toolbar toolbar = findViewById(R.id.toolBar);
+        Toolbar toolbar = findViewById(R.id.toolBar_admin);
         setSupportActionBar(toolbar);
 
         initUi();
@@ -142,5 +175,12 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         }
         tvEmail.setText(email);
         Glide.with(this).load(photoUrl).error(R.drawable.ic_ava_default).into(img_avatar);
+    }
+
+    public void openGallery(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        launcher.launch(Intent.createChooser(intent,getString(R.string.gallery)));
     }
 }

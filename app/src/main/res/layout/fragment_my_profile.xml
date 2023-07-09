@@ -11,12 +11,13 @@
         android:id="@+id/image_avatar"
         android:layout_width="120dp"
         android:layout_height="120dp"
+
         android:src="@drawable/ic_ava_default"/>
 
     <EditText
         android:id="@+id/edt_full_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:padding="10dp"
         android:hint="Full name"
         android:layout_marginTop="30dp"/>
@@ -24,7 +25,7 @@
     <EditText
         android:id="@+id/edt_email_profile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:padding="10dp"
         android:hint="Email"
         android:layout_marginTop="10dp"/>
@@ -37,12 +38,15 @@
         android:padding="10dp"
         android:text="Update Profile"/>
 
-    <Button
-        android:id="@+id/btn_update_email"
-        android:layout_width="match_parent"
+    <com.github.ybq.android.spinkit.SpinKitView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        style="@style/SpinKitView.Circle"
+        app:SpinKit_Color="@color/green"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
-        android:text="Update Email"/>
+        android:layout_marginTop="40dp"
+        android:id="@+id/processBar_update_profile"
+        android:visibility="invisible"/>
+
 
 </LinearLayout>

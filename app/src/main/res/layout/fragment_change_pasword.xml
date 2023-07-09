@@ -4,7 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
+    android:maxLength="100"
     android:background="@color/white">
+
+    <EditText
+        android:id="@+id/edt_oldpass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Old Password"
+        android:textSize="20sp"
+        android:inputType="textPassword"/>
 
     <EditText
         android:id="@+id/edt_newpass"
@@ -12,6 +21,16 @@
         android:layout_height="wrap_content"
         android:hint="New Password"
         android:textSize="20sp"
+        android:maxLength="100"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/edt_cfpass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Confirm Password"
+        android:textSize="20sp"
+        android:maxLength="100"
         android:inputType="textPassword"/>
 
     <Button
@@ -20,5 +39,16 @@
         android:layout_height="wrap_content"
         android:text="Change password"
         android:layout_marginTop="10dp"/>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        style="@style/SpinKitView.Circle"
+        app:SpinKit_Color="@color/green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:id="@+id/processBar_update_password"
+        android:visibility="invisible"/>
 
 </LinearLayout>

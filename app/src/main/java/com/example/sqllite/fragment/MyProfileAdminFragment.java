@@ -22,8 +22,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.example.sqllite.UserActivity;
+import com.example.sqllite.AdminActivity;
 import com.example.sqllite.R;
+import com.example.sqllite.UserActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,21 +36,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MyProfileFragment extends Fragment {
+public class MyProfileAdminFragment extends Fragment {
     private View view;
     private ImageView img_ava;
     private EditText edtFullname, edtEmail;
     private Button btnUpdateProfile;
     private ProgressBar progressBar;
     private Uri uri;
-    private UserActivity activity;
+    private AdminActivity activity;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
-        activity = (UserActivity) getActivity();
+        activity = (AdminActivity) getActivity();
         initUi();
         setUserInformation();
         initListener();
