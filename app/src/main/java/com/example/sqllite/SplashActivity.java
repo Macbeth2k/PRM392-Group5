@@ -2,9 +2,19 @@ package com.example.sqllite;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
@@ -24,7 +34,6 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -32,11 +41,12 @@ public class SplashActivity extends AppCompatActivity {
                 nextActivity();
             }
         }, 2000);
+
     }
 
     private void nextActivity() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null){
+        if (user == null || isNetworkAvailable(SplashActivity.this)){
             //haven't logged in
             Intent intent = new Intent(this, SignInActivity.class);
             startActivity(intent);
@@ -130,5 +140,23 @@ public class SplashActivity extends AppCompatActivity {
 
             }
         };
+    }
+
+    private boolean isNetworkAvailable(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (manager == null){
+            return false;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            Network network = manager.getActiveNetwork();
+            if (network == null){
+                return false;
+            }
+            NetworkCapabilities capabilities = manager.getNetworkCapabilities(network);
+            return capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+        } else {
+            NetworkInfo info = manager.getActiveNetworkInfo();
+            return info != null && info.isConnected();
+        }
     }
 }

@@ -2,10 +2,19 @@ package com.example.sqllite;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -48,6 +57,9 @@ public class SignInActivity extends AppCompatActivity {
 
         initUi();
         initListener();
+
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        this.registerReceiver(internetReceiver, filter);
     }
 
     private void initListener() {
@@ -111,8 +123,13 @@ public class SignInActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(SignInActivity.this, getString(R.string.sign_in_fail),
-                                    Toast.LENGTH_SHORT).show();
+                            if (isNetworkAvailable(SignInActivity.this)){
+                                Toast.makeText(SignInActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+
+                            }else {
+                                Toast.makeText(SignInActivity.this, getString(R.string.sign_in_fail),
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });
@@ -210,5 +227,50 @@ public class SignInActivity extends AppCompatActivity {
         };
     }
 
+    private void displayAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(SignInActivity.this.getString(R.string.app_name))
+                .setMessage(SignInActivity.this.getString(R.string.no_internet_detect))
+                .setPositiveButton(SignInActivity.this.getString(R.string.close_app), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        System.exit(0);
+                    }
+                })
+                .setNegativeButton(SignInActivity.this.getString(R.string.wait), null)
+                .create();
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private boolean isNetworkAvailable(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (manager == null){
+            return false;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            Network network = manager.getActiveNetwork();
+            if (network == null){
+                return false;
+            }
+            NetworkCapabilities capabilities = manager.getNetworkCapabilities(network);
+            return capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+        } else {
+            NetworkInfo info = manager.getActiveNetworkInfo();
+            return info != null && info.isConnected();
+        }
+    }
+
+    private final BroadcastReceiver internetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Context applicationContext = context.getApplicationContext();
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())){
+                if (!isNetworkAvailable(context)){
+                    displayAlert();
+                }
+            }
+        }
+    };
 
 }

@@ -25,8 +25,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.sqllite.fragment.AdminHomeFragment;
+import com.example.sqllite.fragment.CartFragment;
 import com.example.sqllite.fragment.ChangePasswordFragment;
-import com.example.sqllite.fragment.FavouriteFragment;
 import com.example.sqllite.fragment.HistoryFragment;
 import com.example.sqllite.fragment.HomeFragment;
 import com.example.sqllite.fragment.MyProfileAdminFragment;
@@ -107,7 +107,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
             }
         } else if (id == R.id.nav_fav) {
             if (currentFragment != FRAGMENT_FAVOURITE){
-                replaceFragment(new FavouriteFragment());
+                replaceFragment(new CartFragment());
                 currentFragment = FRAGMENT_FAVOURITE;
             }
         } else if (id == R.id.nav_history) {

@@ -24,6 +24,11 @@
     <string name="firebase_role_table">role</string>
     <string name="pass_constraint">Password must have at least 6 characters</string>
     <string name="gallery">Select Picture</string>
+    <string name="no_internet_detect">Cannot connect to app because there is no internet.</string>
+    <string name="close_app">close app\n</string>
+    <string name="wait">wait\n</string>
+    <string name="no_internet">Cannot connect to the internet</string>
+    <string name="nav_cart">Cart</string>
 
 
 </resources>

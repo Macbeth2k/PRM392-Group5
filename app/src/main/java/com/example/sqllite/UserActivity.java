@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -13,10 +14,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.MenuItem;
@@ -25,8 +35,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.sqllite.fragment.CartFragment;
 import com.example.sqllite.fragment.ChangePasswordFragment;
-import com.example.sqllite.fragment.FavouriteFragment;
 import com.example.sqllite.fragment.HistoryFragment;
 import com.example.sqllite.fragment.HomeFragment;
 import com.example.sqllite.fragment.MyProfileFragment;
@@ -40,7 +50,7 @@ public class UserActivity extends AppCompatActivity implements NavigationView.On
     public static final int MY_REQUEST_CODE = 10;
     private DrawerLayout drawerLayout;
     private static int FRAGMENT_HOME = 0;
-    private static int FRAGMENT_FAVOURITE = 1;
+    private static int FRAGMENT_CART = 1;
     private static int FRAGMENT_HISTORY = 2;
     private static int FRAGMENT_MY_PROFILE = 3;
     private static int FRAGMENT_CHANGE_PASSWORD = 4;
@@ -96,6 +106,8 @@ public class UserActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
 
         showUserInformation();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        this.registerReceiver(internetReceiver, filter);
     }
 
     @Override
@@ -107,9 +119,9 @@ public class UserActivity extends AppCompatActivity implements NavigationView.On
                 currentFragment = FRAGMENT_HOME;
             }
         } else if (id == R.id.nav_fav) {
-            if (currentFragment != FRAGMENT_FAVOURITE){
-                replaceFragment(new FavouriteFragment());
-                currentFragment = FRAGMENT_FAVOURITE;
+            if (currentFragment != FRAGMENT_CART){
+                replaceFragment(new CartFragment());
+                currentFragment = FRAGMENT_CART;
             }
         } else if (id == R.id.nav_history) {
             if (currentFragment != FRAGMENT_HISTORY){
@@ -194,4 +206,50 @@ public class UserActivity extends AppCompatActivity implements NavigationView.On
         intent.setAction(Intent.ACTION_GET_CONTENT);
         launcher.launch(Intent.createChooser(intent,getString(R.string.gallery)));
     }
+
+    private void displayAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(UserActivity.this.getString(R.string.app_name))
+                .setMessage(UserActivity.this.getString(R.string.no_internet_detect))
+                .setPositiveButton(UserActivity.this.getString(R.string.close_app), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        System.exit(0);
+                    }
+                })
+                .setNegativeButton(UserActivity.this.getString(R.string.wait), null)
+                .create();
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private final BroadcastReceiver internetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Context applicationContext = context.getApplicationContext();
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())){
+                if (!isNetworkAvailable(context)){
+                    displayAlert();
+                }
+            }
+        }
+
+        private boolean isNetworkAvailable(Context context) {
+            ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (manager == null){
+                return false;
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                Network network = manager.getActiveNetwork();
+                if (network == null){
+                    return false;
+                }
+                NetworkCapabilities capabilities = manager.getNetworkCapabilities(network);
+                return capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+            } else {
+                NetworkInfo info = manager.getActiveNetworkInfo();
+                return info != null && info.isConnected();
+            }
+        }
+    };
 }

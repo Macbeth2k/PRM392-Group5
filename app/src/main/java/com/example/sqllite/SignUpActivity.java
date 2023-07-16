@@ -2,10 +2,20 @@ package com.example.sqllite;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,16 +41,16 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText edt_email, edt_password, edt_cf_password;
     private Button btnSignup;
     private ProgressBar progressBar;
-    private boolean isAdmin;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
         initUi();
         initListener();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        this.registerReceiver(internetReceiver, filter);
     }
 
     private void initListener() {
@@ -76,8 +86,13 @@ public class SignUpActivity extends AppCompatActivity {
                                 finishAffinity();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(SignUpActivity.this, getString(R.string.pass_constraint),
-                                    Toast.LENGTH_SHORT).show();
+                            if (isNetworkAvailable(SignUpActivity.this)) {
+                                Toast.makeText(SignUpActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(SignUpActivity.this, getString(R.string.pass_constraint),
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });
@@ -131,6 +146,70 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         };
+    }
+
+    private void displayAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(SignUpActivity.this.getString(R.string.app_name))
+                .setMessage(SignUpActivity.this.getString(R.string.no_internet_detect))
+                .setPositiveButton(SignUpActivity.this.getString(R.string.close_app), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        System.exit(0);
+                    }
+                })
+                .setNegativeButton(SignUpActivity.this.getString(R.string.wait), null)
+                .create();
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private final BroadcastReceiver internetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Context applicationContext = context.getApplicationContext();
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())){
+                if (!isNetworkAvailable(context)){
+                    displayAlert();
+                }
+            }
+        }
+
+        private boolean isNetworkAvailable(Context context) {
+            ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (manager == null){
+                return false;
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                Network network = manager.getActiveNetwork();
+                if (network == null){
+                    return false;
+                }
+                NetworkCapabilities capabilities = manager.getNetworkCapabilities(network);
+                return capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+            } else {
+                NetworkInfo info = manager.getActiveNetworkInfo();
+                return info != null && info.isConnected();
+            }
+        }
+    };
+
+    private boolean isNetworkAvailable(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (manager == null){
+            return false;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            Network network = manager.getActiveNetwork();
+            if (network == null){
+                return false;
+            }
+            NetworkCapabilities capabilities = manager.getNetworkCapabilities(network);
+            return capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+        } else {
+            NetworkInfo info = manager.getActiveNetworkInfo();
+            return info != null && info.isConnected();
+        }
     }
 
 }
