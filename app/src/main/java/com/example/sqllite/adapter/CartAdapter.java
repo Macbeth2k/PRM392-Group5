@@ -32,6 +32,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     public interface IClickItemCart {
         void deleteFromCart(Cart cart);
+        void updateAmount(Cart cart);
+
     }
 
     @NonNull
@@ -57,6 +59,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 cart.setQuantity(cart.getQuantity() + 1);
                 holder.edt_quantity.setText("Quantity: " + cart.getQuantity());
                 Toast.makeText(v.getContext(), "Add one amount sucessfully", Toast.LENGTH_SHORT).show();
+                iClickItemCart.updateAmount(cart);
             }
         });
 
@@ -67,6 +70,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                     cart.setQuantity(cart.getQuantity() - 1);
                     holder.edt_quantity.setText("Quantity: " + cart.getQuantity());
                     Toast.makeText(v.getContext(), "Delete one amount sucessfully", Toast.LENGTH_SHORT).show();
+                    iClickItemCart.updateAmount(cart);
                 }
                 else {
                     Toast.makeText(v.getContext(), "Amount can't lower than 0", Toast.LENGTH_SHORT).show();

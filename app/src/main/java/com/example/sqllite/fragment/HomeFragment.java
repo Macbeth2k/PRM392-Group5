@@ -54,30 +54,28 @@ public class HomeFragment extends Fragment {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                int check = 0;
                 final Cart[] newCartToAdd = {null};
                 CartDAO cartDAO = AppDatabase.getInstance(getActivity()).cartDAO();
                 Cart newCart = cartDAO.checkIdCart(product.getProductID());
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (newCart != null) {
-                            // neu da ton tai tang gia tri len 1
-                            newCart.setQuantity(newCart.getQuantity() + 1);
-                            newCartToAdd[0] = new Cart(product.getProductID(), product.getProductName(), newCart.getQuantity());
-                            Toast.makeText(getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            // neu ko co
-                            newCartToAdd[0] = new Cart(product.getProductID(), product.getProductName(), 1);
-                            Toast.makeText(getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
-                        }
-
+                        Toast.makeText(getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
                     }
                 });
+                if (newCart != null) {
+                    // neu da ton tai tang gia tri len 1
+                    newCart.setQuantity(newCart.getQuantity() + 1);
+                    newCartToAdd[0] = new Cart(product.getProductID(), product.getProductName(), newCart.getQuantity());
+                } else {
+                    // neu ko co
+                    newCartToAdd[0] = new Cart(product.getProductID(), product.getProductName(), 1);
+
+                }
                 if (newCartToAdd[0] != null) {
                     Cart oldCart = cartDAO.checkIdCart(newCartToAdd[0].getProductId());
-                    if (oldCart != null) cartDAO.updateCart(newCartToAdd[0]);
-                    cartDAO.insertCart(newCartToAdd[0]);
+                    if (oldCart != null) cartDAO.updateCartQuantityWithProductId(newCartToAdd[0].getProductId(), newCartToAdd[0].getQuantity());
+                    else cartDAO.insertCart(newCartToAdd[0]);
                 }
             }
         });

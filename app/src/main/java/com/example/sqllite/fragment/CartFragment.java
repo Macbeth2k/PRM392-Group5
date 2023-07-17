@@ -16,14 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sqllite.AppDatabase;
 import com.example.sqllite.DAO.CartDAO;
-import com.example.sqllite.DAO.ProductDAO;
 import com.example.sqllite.Models.Cart;
-import com.example.sqllite.Models.Products;
 import com.example.sqllite.R;
-import com.example.sqllite.UserActivity;
 import com.example.sqllite.adapter.CartAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -39,7 +35,7 @@ public class CartFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_cart, container, false);
+        View view = inflater.inflate(R.layout.fragment_cart, container, false);
         rcv_cart = view.findViewById(R.id.rcv_cart);
 
         cartAdapter = new CartAdapter(new CartAdapter.IClickItemCart() {
@@ -47,6 +43,11 @@ public class CartFragment extends Fragment {
             public void deleteFromCart(Cart cart) {
                 deleteFromCartNow(cart);
             }
+            @Override
+            public void updateAmount(Cart cart) {
+                updateAmountNow(cart);
+            }
+
         });
         loadCartList();
 
@@ -63,18 +64,45 @@ public class CartFragment extends Fragment {
         return view;
     }
 
+    private void updateAmountNow(Cart cart) {
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                CartDAO cartDAO = AppDatabase.getInstance(getActivity()).cartDAO();
+                cartDAO.updateCartQuantityWithProductId(cart.getProductId(), cart.getQuantity() );
+            }
+        });
+    }
+
+
     private void deleteFromCartNow(Cart cart) {
-        //Cart new_cart = AppDatabase.getInstance(getActivity()).cartDAO().getOneCart(cart.getCartId());
-        for (int i = 0; i < cartList.size(); i++) {
-            Cart new_cart = cartList.get(i);
-            if (new_cart != null ) {
-                cartList.remove(new_cart);
-                Toast.makeText(this.getContext(), "Delete from cart successfully", Toast.LENGTH_SHORT).show();
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                CartDAO cartDAO = AppDatabase.getInstance(getActivity()).cartDAO();
+                Cart new_cart = cartDAO.getOneCart(cart.getCartId());
+                if (new_cart != null) {
+                    cartDAO.deleteCart(new_cart);
+                    loadCartList();
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (new_cart != null) {
+
+                            Toast.makeText(getContext(), "Delete from cart successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "This cart is not exist anymore", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
-            else {
-                Toast.makeText(this.getContext(), "This cart is not exist anymore", Toast.LENGTH_SHORT).show();
-            }
-        }
+        });
+
+
+
 
     }
 
@@ -96,19 +124,5 @@ public class CartFragment extends Fragment {
                 });
             }
         });
-    }
-
-
-
-    List<Cart> getListCart() {
-        List<Cart> cartList = new ArrayList<>();
-        cartList.add(new Cart(2, "Book 1", 1));
-        cartList.add(new Cart(3, "Book 2", 2));
-        cartList.add(new Cart(6, "Book 3", 3));
-        cartList.add(new Cart(11, "Book 4", 4));
-        cartList.add(new Cart(55, "Book 6", 90));
-        cartList.add(new Cart(4, "Book 9", 10));
-        cartList.add(new Cart(5, "Book 11", 20));
-        return cartList;
     }
 }
