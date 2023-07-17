@@ -21,6 +21,14 @@ public class Categories {
         this.categoryName = categoryName;
     }
 
+    @Override
+    public String toString() {
+        return "Categories{" +
+                "categoryID=" + categoryID +
+                ", categoryName='" + categoryName + '\'' +
+                '}';
+    }
+
     // Getters and Setters
 
     public int getCategoryID() {

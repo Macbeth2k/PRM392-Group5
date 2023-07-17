@@ -10,12 +10,12 @@
         android:id="@+id/edt_FirmID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="249dp"
+        android:layout_marginTop="120dp"
         android:ems="10"
+        android:hint="Firm ID"
         android:inputType="text"
-        android:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,32 +25,78 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="39dp"
         android:ems="10"
+        android:hint="FirmName"
         android:inputType="text"
-        android:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edt_FirmID" />
 
+    <TextView
+        android:id="@+id/FirmManagement_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="41dp"
+        android:text="Firm Management"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_deletetFirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Delete"
+        app:layout_constraintEnd_toStartOf="@+id/btn_ListFirm"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_addfirm"
+        app:layout_constraintTop_toBottomOf="@+id/edt_FirmName" />
+
     <Button
         android:id="@+id/btn_addfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="53dp"
+        android:layout_marginTop="36dp"
         android:text="Add"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_deletetFirm"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edt_FirmName" />
 
     <Button
-        android:id="@+id/Home"
+        android:id="@+id/btn_ListFirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="53dp"
-        android:text="Management"
+        android:layout_marginTop="36dp"
+        android:text="List"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_deletetFirm"
+        app:layout_constraintTop_toBottomOf="@+id/edt_FirmName" />
+
+    <TextView
+        android:id="@+id/tvshow_firm"
+        android:layout_width="398dp"
+        android:layout_height="177dp"
+        android:layout_marginTop="85dp"
+        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_addfirm" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_deletetFirm" />
+
+    <Button
+        android:id="@+id/btn_homefirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Home"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvshow_firm" />
 </androidx.constraintlayout.widget.ConstraintLayout>

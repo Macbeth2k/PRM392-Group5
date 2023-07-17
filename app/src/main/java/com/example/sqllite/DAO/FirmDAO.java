@@ -13,6 +13,9 @@ public interface FirmDAO {
     @Query("SELECT * FROM firms")
     List<Firm> getAll();
 
+    @Query("SELECT * FROM firms WHERE firmID LIKE :firmId")
+    Firm getByIds(int firmId);
+
     @Insert
     void insertAllFirms(Firm... firms);
 

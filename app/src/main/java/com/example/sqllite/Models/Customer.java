@@ -30,6 +30,16 @@ public class Customer {
         this.phone = phone;
     }
 
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "customerID=" + customerID +
+                ", customerName='" + customerName + '\'' +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
+
     // Getters and Setters
 
     public int getCustomerID() {

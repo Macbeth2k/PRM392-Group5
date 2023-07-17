@@ -33,6 +33,16 @@ public class Order {
         this.shippingAddress = shippingAddress;
     }
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderID=" + orderID +
+                ", customerID=" + customerID +
+                ", orderDate=" + orderDate +
+                ", shippingAddress='" + shippingAddress + '\'' +
+                '}';
+    }
+
     // Getters and Setters
 
     public int getOrderID() {
