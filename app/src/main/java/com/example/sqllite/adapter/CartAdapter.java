@@ -80,16 +80,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 iClickItemCart.deleteFromCart(cart);
             }
         });
-
-        holder.btn_purchase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UserActivity userActivity = new UserActivity();
-                FragmentTransaction transaction = userActivity.getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.content_frame, new PurchaseFragment());
-                transaction.commit();
-            }
-        });
     }
 
     @Override
@@ -107,7 +97,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         private Button btn_increase;
         private Button btn_decrease;
         private Button btn_delete;
-        private Button btn_purchase;
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -117,7 +106,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             btn_increase = itemView.findViewById(R.id.btn_increase);
             btn_decrease = itemView.findViewById(R.id.btn_decrease);
             btn_delete = itemView.findViewById(R.id.btn_delete);
-            btn_purchase = itemView.findViewById(R.id.btn_purchase);
         }
     }
 }

@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +18,7 @@ import com.example.sqllite.AppDatabase;
 import com.example.sqllite.Models.Cart;
 import com.example.sqllite.Models.Products;
 import com.example.sqllite.R;
+import com.example.sqllite.UserActivity;
 import com.example.sqllite.adapter.CartAdapter;
 
 import java.util.ArrayList;
@@ -26,6 +29,8 @@ public class CartFragment extends Fragment {
     private RecyclerView rcv_cart;
     private CartAdapter cartAdapter;
     private List<Cart> listCart;
+
+    private Button btn_purchase;
 
     @Nullable
     @Override
@@ -42,6 +47,17 @@ public class CartFragment extends Fragment {
         //listCart = AppDatabase.getInstance(getActivity()).cartDAO().getListCart();
         listCart = getListCart();
         cartAdapter.setData(listCart);
+
+        btn_purchase = view.findViewById(R.id.btn_purchase);
+        btn_purchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_frame, new PurchaseFragment());
+                transaction.commit();
+
+            }
+        });
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rcv_cart.setLayoutManager(manager);
