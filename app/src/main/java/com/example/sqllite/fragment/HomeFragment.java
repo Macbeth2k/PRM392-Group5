@@ -55,22 +55,24 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 int check = 0;
+                final Cart[] newCartToAdd = {null};
                 CartDAO cartDAO = AppDatabase.getInstance(getActivity()).cartDAO();
                 Cart newCart = cartDAO.checkIdCart(product.getProductID());
-                if (newCart != null) {
-                    // neu da ton tai tang gia tri len 1
-                    newCart.setQuantity(newCart.getQuantity() + 1);
-                    Toast.makeText(getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
-                }
-                // neu ko co
-                Cart newCartToAdd = new Cart(product.getProductID(), product.getProductName(), 1);
-                Toast.makeText(getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        cartDAO.insertCart(newCartToAdd);
+                        if (newCart != null) {
+                            // neu da ton tai tang gia tri len 1
+                            newCart.setQuantity(newCart.getQuantity() + 1);
+                            Toast.makeText(getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
+                        }
+                        // neu ko co
+                        newCartToAdd[0] = new Cart(product.getProductID(), product.getProductName(), 1);
+                        Toast.makeText(getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
+
                     }
                 });
+                if (newCartToAdd[0] != null) cartDAO.insertCart(newCartToAdd[0]);
             }
         });
 //        Cart newCart = AppDatabase.getInstance(getActivity()).cartDAO().checkIdCart(product.getProductID());
