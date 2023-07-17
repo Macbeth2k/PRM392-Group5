@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sqllite.AppDatabase;
+import com.example.sqllite.DAO.CartDAO;
+import com.example.sqllite.DAO.ProductDAO;
 import com.example.sqllite.Models.Cart;
 import com.example.sqllite.Models.Products;
 import com.example.sqllite.R;
@@ -23,12 +25,14 @@ import com.example.sqllite.adapter.CartAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class CartFragment extends Fragment {
 
     private RecyclerView rcv_cart;
     private CartAdapter cartAdapter;
-    private List<Cart> listCart;
+    private List<Cart> cartList;
 
     private Button btn_purchase;
 
@@ -44,9 +48,7 @@ public class CartFragment extends Fragment {
                 deleteFromCartNow(cart);
             }
         });
-        //listCart = AppDatabase.getInstance(getActivity()).cartDAO().getListCart();
-        listCart = getListCart();
-        cartAdapter.setData(listCart);
+        loadCartList();
 
         btn_purchase = view.findViewById(R.id.btn_purchase);
         btn_purchase.setOnClickListener(new View.OnClickListener() {
@@ -58,19 +60,15 @@ public class CartFragment extends Fragment {
 
             }
         });
-
-        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        rcv_cart.setLayoutManager(manager);
-        rcv_cart.setAdapter(cartAdapter);
         return view;
     }
 
     private void deleteFromCartNow(Cart cart) {
         //Cart new_cart = AppDatabase.getInstance(getActivity()).cartDAO().getOneCart(cart.getCartId());
-        for (int i = 0; i < listCart.size(); i++) {
-            Cart new_cart = listCart.get(i);
+        for (int i = 0; i < cartList.size(); i++) {
+            Cart new_cart = cartList.get(i);
             if (new_cart != null ) {
-                listCart.remove(new_cart);
+                cartList.remove(new_cart);
                 Toast.makeText(this.getContext(), "Delete from cart successfully", Toast.LENGTH_SHORT).show();
             }
             else {
@@ -78,6 +76,26 @@ public class CartFragment extends Fragment {
             }
         }
 
+    }
+
+    private void loadCartList() {
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                CartDAO cartDAO = AppDatabase.getInstance(getActivity()).cartDAO();
+                cartList = cartDAO.getListCart();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cartAdapter.setData(cartList);
+                        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                        rcv_cart.setLayoutManager(manager);
+                        rcv_cart.setAdapter(cartAdapter);
+                    }
+                });
+            }
+        });
     }
 
 

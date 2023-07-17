@@ -64,27 +64,23 @@ public class HomeFragment extends Fragment {
                         if (newCart != null) {
                             // neu da ton tai tang gia tri len 1
                             newCart.setQuantity(newCart.getQuantity() + 1);
+                            newCartToAdd[0] = new Cart(product.getProductID(), product.getProductName(), newCart.getQuantity());
+                            Toast.makeText(getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // neu ko co
+                            newCartToAdd[0] = new Cart(product.getProductID(), product.getProductName(), 1);
                             Toast.makeText(getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
                         }
-                        // neu ko co
-                        newCartToAdd[0] = new Cart(product.getProductID(), product.getProductName(), 1);
-                        Toast.makeText(getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
 
                     }
                 });
-                if (newCartToAdd[0] != null) cartDAO.insertCart(newCartToAdd[0]);
+                if (newCartToAdd[0] != null) {
+                    Cart oldCart = cartDAO.checkIdCart(newCartToAdd[0].getProductId());
+                    if (oldCart != null) cartDAO.updateCart(newCartToAdd[0]);
+                    cartDAO.insertCart(newCartToAdd[0]);
+                }
             }
         });
-//        Cart newCart = AppDatabase.getInstance(getActivity()).cartDAO().checkIdCart(product.getProductID());
-//        if (newCart != null) {
-//            // neu da ton tai tang gia tri len 1
-//            newCart.setQuantity(newCart.getQuantity() + 1);
-//            Toast.makeText(getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
-//        }
-//        // neu ko co
-//        Cart newCartToAdd = new Cart(product.getProductID(), product.getProductName(), 1);
-//        AppDatabase.getInstance(getContext()).cartDAO().insertCart(newCartToAdd);
-//        Toast.makeText(getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
     }
 
     private void loadProductList() {
