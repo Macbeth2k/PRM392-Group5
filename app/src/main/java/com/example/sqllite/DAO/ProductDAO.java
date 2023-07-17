@@ -12,7 +12,7 @@ import java.util.List;
 
 @Dao
 public interface ProductDAO {
-    @Query("SELECT * FROM Products")
+    @Query("SELECT * FROM products")
     List<Products> getAll();
 
     @Query("SELECT * FROM Products WHERE ProductID LIKE :productId")
