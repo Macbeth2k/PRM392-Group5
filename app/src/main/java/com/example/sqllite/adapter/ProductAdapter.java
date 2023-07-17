@@ -21,9 +21,22 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>{
     private List<Products> productsList;
 
+    private IClickProductAdapter iClickProductAdapter;
+
     public void setData(List<Products> productsList){
         this.productsList = productsList;
         notifyDataSetChanged();
+    }
+
+    public ProductAdapter() {
+    }
+
+    public ProductAdapter(IClickProductAdapter iClickProductAdapter) {
+        this.iClickProductAdapter = iClickProductAdapter;
+    }
+
+    public interface IClickProductAdapter {
+        void addToCart(Products products);
     }
 
     @NonNull
@@ -39,23 +52,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         if (product == null){
             return;
         }
-        holder.product_image.setImageResource(Integer.parseInt(product.getProductImage()));
+        //if (product.getProductImage() != null) holder.product_image.setImageResource(Integer.parseInt(product.getProductImage()));
         holder.product_name.setText(product.getProductName());
 
         holder.btn_add_to_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                iClickProductAdapter.addToCart(product);
                 // check xem lieu product co trong database ko
-                Cart newCart = AppDatabase.getInstance(v.getContext()).cartDAO().checkIdCart(product.getProductID());
-                if (newCart != null) {
-                    // neu da ton tai tang gia tri len 1
-                    newCart.setQuantity(newCart.getQuantity() + 1);
-                    Toast.makeText(v.getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
-                }
-                // neu ko co
-                Cart newCartToAdd = new Cart(product.getProductID(), product.getProductName(), 1);
-                AppDatabase.getInstance(v.getContext()).cartDAO().insertCart(newCartToAdd);
-                Toast.makeText(v.getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
+
+//                Cart newCart = AppDatabase.getInstance(v.getContext()).cartDAO().checkIdCart(product.getProductID());
+//                if (newCart != null) {
+//                    // neu da ton tai tang gia tri len 1
+//                    newCart.setQuantity(newCart.getQuantity() + 1);
+//                    Toast.makeText(v.getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
+//                }
+//                // neu ko co
+//                Cart newCartToAdd = new Cart(product.getProductID(), product.getProductName(), 1);
+//                AppDatabase.getInstance(v.getContext()).cartDAO().insertCart(newCartToAdd);
+//                Toast.makeText(v.getContext(), "Add to cart sucessfully", Toast.LENGTH_SHORT).show();
 
             }
         });
