@@ -45,6 +45,19 @@ public class Products {
         this.productImage = productImage;
     }
 
+    @Override
+    public String toString() {
+        return "Products{" +
+                "productID=" + productID +
+                ", productName='" + productName + '\'' +
+                ", supplierID=" + supplierID +
+                ", categoryID=" + categoryID +
+                ", quantityPerUnit=" + quantityPerUnit +
+                ", unitPrice=" + unitPrice +
+                ", productImage='" + productImage + '\'' +
+                '}';
+    }
+
     // Getters and Setters
 
     public int getProductID() {

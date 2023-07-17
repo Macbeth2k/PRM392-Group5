@@ -23,6 +23,14 @@ public class Firm {
         this.firmName = firmName;
     }
 
+    @Override
+    public String toString() {
+        return "Firm{" +
+                "firmID=" + firmID +
+                ", firmName='" + firmName + '\'' +
+                '}';
+    }
+
     // Getters and Setters
 
     public int getFirmID() {

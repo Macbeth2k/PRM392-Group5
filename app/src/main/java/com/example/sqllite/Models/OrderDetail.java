@@ -31,6 +31,16 @@ public class OrderDetail {
         this.quantity = quantity;
     }
 
+    @Override
+    public String toString() {
+        return "OrderDetail{" +
+                "orderID=" + orderID +
+                ", productID=" + productID +
+                ", unitPrice=" + unitPrice +
+                ", quantity=" + quantity +
+                '}';
+    }
+
     // Getters and Setters
 
     public int getOrderID() {

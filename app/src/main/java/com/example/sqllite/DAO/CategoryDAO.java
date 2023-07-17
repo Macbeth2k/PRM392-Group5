@@ -10,12 +10,16 @@ import com.example.sqllite.Models.Categories;
 import java.util.List;
 @Dao
 public interface CategoryDAO {
-    @Query("SELECT * FROM categories")
+    @Query("SELECT * FROM Categories")
     List<Categories> getAll();
+
+    @Query("SELECT * FROM Categories WHERE categoryID LIKE :categoryId")
+    Categories getbyIdCategory(int categoryId);
 
     @Insert
     void insertAllCategories(Categories... categories);
 
     @Delete
     void deleteCategory (Categories categories);
+
 }

@@ -159,7 +159,7 @@ public class SignInActivity extends AppCompatActivity {
                     String role = snapshot.getValue(String.class);
                     if (role.equals(getString(R.string.role_admin))){
                         progressBar.setVisibility(View.GONE);
-                        Intent intent = new Intent(SignInActivity.this, AdminActivity.class);
+                        Intent intent = new Intent(SignInActivity.this, AdminPage.class);
                         startActivity(intent);
                         finishAffinity();
                     }else {

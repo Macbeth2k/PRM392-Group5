@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OrderDetailManagement">
+
+    <TextView
+        android:id="@+id/txt_PriceOrderDetail"
+        android:layout_width="207dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.629"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/txt_ProductIDDetail" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="81dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="40dp"
+        android:text="ProductID"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="81dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="40dp"
+        android:text="Price"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/txt_QuantityOrderDetail"
+        android:layout_width="207dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.629"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/txt_PriceOrderDetail" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="81dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="40dp"
+        android:text="Quantity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+    <TextView
+        android:id="@+id/OrderDetail_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Order Detail"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_OrderIDDetail"
+        android:layout_width="207dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="92dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.629"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/OrderDetail_title" />
+
+    <TextView
+        android:id="@+id/txt_ProductIDDetail"
+        android:layout_width="207dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="40dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.629"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/txt_OrderIDDetail" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="81dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="108dp"
+        android:text="OrderID"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.103"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/OrderDetail_title" />
+
+    <TextView
+        android:id="@+id/txt_TotalMoney"
+        android:layout_width="201dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="41dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.77"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_QuantityOrderDetail" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="119dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="41dp"
+        android:text="Total Money"
+        app:layout_constraintEnd_toStartOf="@+id/txt_TotalMoney"
+        app:layout_constraintHorizontal_bias="0.46"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
