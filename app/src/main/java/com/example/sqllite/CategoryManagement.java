@@ -5,10 +5,13 @@ import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sqllite.DAO.CategoryDAO;
 import com.example.sqllite.Models.Categories;
@@ -34,7 +37,30 @@ public class CategoryManagement extends AppCompatActivity {
                     @Override
                     public void run() {
                         CategoryDAO categoryDAO = db.categoryDAO();
-                        categoryDAO.insertAllCategories(new Categories(Integer.parseInt(edt_cateID.getText().toString()),edt_cateName.getText().toString()));
+
+                        String categoryIDText = edt_cateID.getText().toString().trim();
+                        String categoryName = edt_cateName.getText().toString().trim();
+
+                        // Kiểm tra tất cả các điều kiện nhập
+                        if (categoryIDText.isEmpty()) {
+                            displayToast("Vui lòng nhập categoryID");
+                            return;
+                        }
+
+                        if (categoryName.isEmpty()) {
+                            displayToast("Vui lòng nhập categoryName");
+                            return;
+                        }
+
+                        int categoryID = Integer.parseInt(categoryIDText);
+                        Categories existingCategory = categoryDAO.getbyIdCategory(categoryID);
+                        if (existingCategory != null) {
+                            displayToast("Category ID đã tồn tại");
+                            return;
+                        }
+
+                        // Nếu tất cả điều kiện nhập đều hợp lệ, thực hiện thêm vào cơ sở dữ liệu
+                        categoryDAO.insertAllCategories(new Categories(categoryID, categoryName));
                     }
                 });
                 t.start();
@@ -83,6 +109,14 @@ public class CategoryManagement extends AppCompatActivity {
                     }
                 });
                 t.start();
+            }
+        });
+    }
+    private void displayToast(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -8,10 +8,13 @@ import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sqllite.DAO.FirmDAO;
 import com.example.sqllite.Models.Firm;
@@ -30,20 +33,45 @@ public class FirmManagement extends AppCompatActivity {
             AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                     AppDatabase.class, "database-name-v2").build();
 
-            ((Button)findViewById(R.id.btn_addfirm)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Thread t = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            FirmDAO firmDAO = db.firmDAO();
-                            firmDAO.insertAllFirms(new Firm(Integer.parseInt(edt_firmID.getText().toString()),edt_firmName.getText().toString()));
-                        }
-                    });
-                    t.start();
-                }
-            });
 
+
+        ((Button)findViewById(R.id.btn_addfirm)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FirmDAO firmDAO = db.firmDAO();
+
+                        String firmIDText = edt_firmID.getText().toString().trim();
+                        String firmName = edt_firmName.getText().toString().trim();
+
+                        // Kiểm tra tất cả các điều kiện nhập
+                        if (firmIDText.isEmpty()) {
+                            displayToast("Vui lòng nhập firmID");
+                            return;
+                        }
+
+                        if (firmName.isEmpty()) {
+                            displayToast("Vui lòng nhập firmName");
+                            return;
+                        }
+
+                        // Kiểm tra Firm ID đã tồn tại hay chưa
+                        int firmID = Integer.parseInt(firmIDText);
+                        Firm existingFirm = firmDAO.getByIds(firmID);
+                        if (existingFirm != null) {
+                            displayToast("Firm ID đã tồn tại");
+                            return;
+                        }
+
+                        // Nếu tất cả điều kiện nhập đều hợp lệ, thực hiện thêm vào cơ sở dữ liệu
+                        firmDAO.insertAllFirms(new Firm(firmID, firmName));
+                    }
+                });
+                t.start();
+            }
+        });
         ((Button)findViewById(R.id.btn_ListFirm)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,14 +109,20 @@ public class FirmManagement extends AppCompatActivity {
                 Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Fragment fragment = new AdminHomeFragment();
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.adminhome_frame, fragment);
-                        fragmentTransaction.commit();
+                        Intent intent = new Intent(FirmManagement.this, AdminPage.class);
+                        startActivity(intent);
                     }
                 });
                 t.start();
+            }
+        });
+    }
+    private void displayToast(final String message) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
