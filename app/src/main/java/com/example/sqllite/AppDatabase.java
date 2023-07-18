@@ -22,7 +22,7 @@ import com.example.sqllite.Models.Products;
 
 import androidx.room.TypeConverters;
 
-@Database(entities = {Cart.class, Firm.class, Products.class, Categories.class, Customer.class, Order.class, OrderDetail.class}, version = 2, exportSchema = false)
+@Database(entities = {Cart.class, Firm.class, Products.class, Categories.class, Customer.class, Order.class, OrderDetail.class}, version = 3, exportSchema = false)
 @TypeConverters(DataConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract ProductDAO productDAO();
